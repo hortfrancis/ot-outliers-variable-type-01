@@ -1,0 +1,1 @@
+# ot-outliers-variable-type-01
