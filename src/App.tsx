@@ -1,12 +1,14 @@
-
+import { useState } from 'react'
+import PictureFrame from './components/PictureFrame'
+import VariableTypePlayground from './components/VariableTypePlayground'
 
 function App() {
 
   return (
     <>
-      <div>
-        ot-outliers-variable-type-01
-      </div>
+      <PictureFrame>
+        <VariableTypePlayground />
+      </PictureFrame>
     </>
   )
 }

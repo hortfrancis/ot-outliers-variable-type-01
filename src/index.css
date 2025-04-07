@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+body {
+  box-sizing: border-box;
+  font-family: "corsario-variable", sans-serif;
+}
+
+code {
+  font-family: "DM Mono", monospace;
+  padding: 0 0.15rem;
+}
