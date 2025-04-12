@@ -4,6 +4,9 @@ export default function VariableTypePlayground() {
   const [weight, setWeight] = useState(400)
   const [opticalSize, setOpticalSize] = useState(24)
   const [isDancing, setIsDancing] = useState(false)
+  const [isWaving, setIsWaving] = useState(false)
+
+  const text = "Variable Typographia"
 
   // Animation parameters
   const animateAxes = useCallback(() => {
@@ -19,6 +22,23 @@ export default function VariableTypePlayground() {
     setWeight(newWeight)
     setOpticalSize(newOpticalSize)
   }, [])
+
+  // Wave animation for individual letters
+  const getLetterStyle = (index: number) => {
+    if (!isWaving) return {}
+    
+    const time = Date.now() * 0.001
+    const offset = index * 0.2 // Offset each letter by 0.2 seconds
+    
+    // Create a wave effect for each letter
+    const letterWeight = Math.round(500 + Math.sin(time * 3 + offset) * 400)
+    const letterOpticalSize = Math.round(27 + Math.cos(time * 2 + offset) * 21)
+
+    return {
+      display: 'inline-block',
+      fontVariationSettings: `"wght" ${letterWeight}, "opsz" ${letterOpticalSize}`,
+    }
+  }
 
   useEffect(() => {
     let animationFrame: number
@@ -38,17 +58,51 @@ export default function VariableTypePlayground() {
     }
   }, [isDancing, animateAxes])
 
+  // Wave animation effect
+  useEffect(() => {
+    let waveFrame: number
+
+    if (isWaving) {
+      const animate = () => {
+        // Force a re-render to update letter styles
+        setWeight(prev => prev)
+        waveFrame = requestAnimationFrame(animate)
+      }
+      waveFrame = requestAnimationFrame(animate)
+    }
+
+    return () => {
+      if (waveFrame) {
+        cancelAnimationFrame(waveFrame)
+      }
+    }
+  }, [isWaving])
+
   return (
-    <div className="flex flex-col items-center justify-center p-[5vw]">
+    <div className="flex flex-col items-center justify-center p-[5vw] min-h-screen overflow-auto">
       {/* Main text display */}
-      <h1
-        className={`text-[10vw]/[12vw] mb-12 ${!isDancing ? 'transition-all duration-300' : ''}`}
-        style={{
-          fontVariationSettings: `"wght" ${weight}, "opsz" ${opticalSize}`
-        }}
-      >
-        Variable Typographia
-      </h1>
+      {!isWaving ? (
+        <h1
+          className={`text-[10vw]/[12vw] mb-12 ${!isDancing ? 'transition-all duration-300' : ''}`}
+          style={{
+            fontVariationSettings: `"wght" ${weight}, "opsz" ${opticalSize}`
+          }}
+        >
+          {text}
+        </h1>
+      ) : (
+        <h1 className="text-[10vw]/[12vw] mb-12">
+          {text.split('').map((letter, index) => (
+            <span
+              key={index}
+              style={getLetterStyle(index)}
+              className="inline-block"
+            >
+              {letter}
+            </span>
+          ))}
+        </h1>
+      )}
 
       {/* Controls */}
       <div className="w-full max-w-md space-y-8 bg-white border-4 border-black p-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
@@ -69,7 +123,7 @@ export default function VariableTypePlayground() {
               step="1"
               value={weight}
               onChange={(e) => setWeight(Number(e.target.value))}
-              disabled={isDancing}
+              disabled={isDancing || isWaving}
               className="
                 w-full h-3 appearance-none cursor-pointer bg-white
                 border-4 border-black
@@ -116,7 +170,7 @@ export default function VariableTypePlayground() {
               step="1"
               value={opticalSize}
               onChange={(e) => setOpticalSize(Number(e.target.value))}
-              disabled={isDancing}
+              disabled={isDancing || isWaving}
               className="
                 w-full h-3 appearance-none cursor-pointer bg-white
                 border-4 border-black
@@ -146,25 +200,52 @@ export default function VariableTypePlayground() {
           </div>
         </div>
 
-        {/* Dance Button */}
-        <button
-          onClick={() => setIsDancing(!isDancing)}
-          className="
-            w-full py-3 px-6
-            bg-white border-4 border-black
-            text-xl font-bold
-            shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-            hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
-            hover:translate-x-[2px]
-            hover:translate-y-[2px]
-            active:shadow-none
-            active:translate-x-[4px]
-            active:translate-y-[4px]
-            transition-all duration-100
-          "
-        >
-          {isDancing ? "Stop Dancing" : "Let's Dance!"}
-        </button>
+        {/* Animation Buttons */}
+        <div className="space-y-4">
+          <button
+            onClick={() => {
+              setIsDancing(!isDancing)
+              setIsWaving(false)
+            }}
+            className="
+              w-full py-3 px-6
+              bg-white border-4 border-black
+              text-xl font-bold
+              shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+              hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
+              hover:translate-x-[2px]
+              hover:translate-y-[2px]
+              active:shadow-none
+              active:translate-x-[4px]
+              active:translate-y-[4px]
+              transition-all duration-100
+            "
+          >
+            {isDancing ? "Stop Dancing" : "Let's Dance"}
+          </button>
+
+          <button
+            onClick={() => {
+              setIsWaving(!isWaving)
+              setIsDancing(false)
+            }}
+            className="
+              w-full py-3 px-6
+              bg-white border-4 border-black
+              text-xl font-bold
+              shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+              hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
+              hover:translate-x-[2px]
+              hover:translate-y-[2px]
+              active:shadow-none
+              active:translate-x-[4px]
+              active:translate-y-[4px]
+              transition-all duration-100
+            "
+          >
+            {isWaving ? "Stop Wave" : "Make Waves"}
+          </button>
+        </div>
       </div>
     </div>
   )

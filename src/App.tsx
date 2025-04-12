@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import PictureFrame from './components/PictureFrame'
 import VariableTypePlayground from './components/VariableTypePlayground'
 

@@ -1,6 +1,6 @@
 export default function PictureFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative h-screen">
+    <div className="fixed inset-0">
       {/* Outer frame with gradient background */}
 
       {/* Metallic border layer */}
@@ -27,7 +27,7 @@ export default function PictureFrame({ children }: { children: React.ReactNode }
               relative
               backdrop-blur-md
               shadow-inner
-              overflow-hidden
+              overflow-auto
             ">
             {children}
           </div>
