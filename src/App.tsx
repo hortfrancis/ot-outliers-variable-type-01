@@ -1,5 +1,6 @@
 import PictureFrame from './components/PictureFrame'
 import VariableTypePlayground from './components/VariableTypePlayground'
+import DevNotes from './components/DevNotes'
 
 function App() {
 
@@ -8,6 +9,7 @@ function App() {
       <PictureFrame>
         <VariableTypePlayground />
       </PictureFrame>
+      <DevNotes />
     </>
   )
 }

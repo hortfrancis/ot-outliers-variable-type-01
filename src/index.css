@@ -9,3 +9,8 @@ code {
   font-family: "DM Mono", monospace;
   padding: 0 0.15rem;
 }
+
+.DevNotes {
+  font-family: "Crimson Text", serif;
+  font-size: 1.2rem;
+}

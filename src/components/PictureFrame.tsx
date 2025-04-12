@@ -15,14 +15,14 @@ export default function PictureFrame({ children }: { children: React.ReactNode }
         <div className="
             h-full
             border-[2.5vw]
-            border-[#d7f1f7]
+            border-[#EFFAF9]
             bg-gradient-to-br from-[#000032] via-[#0066cc] to-[#00c8ff]
             p-[2.5vw]
             backdrop-blur-sm
           ">
           {/* Content area with glass effect */}
           <div className="
-              bg-[#d7f1f7]
+              bg-[#EFFAF9]
               h-full 
               relative
               backdrop-blur-md
