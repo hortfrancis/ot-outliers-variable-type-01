@@ -1,13 +1,28 @@
 import { useState, useEffect } from "react"
 
 export default function VariableTypePlayground() {
-  const [wavePosition, setWavePosition] = useState(0)
+  // Animation constants
+  const WAVE_SPEED = 0.2 // Speed of the wave animation in units per second
+  const WAVE_SHARPNESS = 8 // Controls how sharp the peak of the wave is
+  const BASE_WEIGHT = 300 // Base font weight (thinnest)
+  const MAX_WEIGHT = 950 // Maximum font weight (boldest)
+  const WEIGHT_RANGE = MAX_WEIGHT - BASE_WEIGHT // Range of weight variation
+  
+  // Color constants
+  const BASE_COLOR = { r: 0, g: 0, b: 50 } // Dark blue
+  const HIGHLIGHT_COLOR = { r: 0, g: 200, b: 255 } // Bright cyan
+  
+  // Font settings
   const opticalSize = 24
-
-  // Add invisible characters at the beginning and end for smooth transitions
+  
+  // Text content
   const visibleText = "Variable Typographia"
+  // Add invisible characters at the beginning and end for smooth transitions
+  // These create a seamless loop when the wave wraps around
   const paddingChars = "••••••••••" // 10 invisible characters
   const text = paddingChars + visibleText + paddingChars
+
+  const [wavePosition, setWavePosition] = useState(0)
 
   // Wave animation for individual letters
   const getLetterStyle = (index: number) => {
@@ -19,20 +34,26 @@ export default function VariableTypePlayground() {
     const distance = Math.abs((letterPosition - wavePosition) % 1)
     
     // Create a sharper peak using a modified Gaussian-like function
-    // Increase the multiplier (from 5 to 8) to make the peak sharper
-    const waveIntensity = Math.exp((-((distance * 8) ** 2)))
+    const waveIntensity = Math.exp((-((distance * WAVE_SHARPNESS) ** 2)))
     
     // Calculate the weight for this letter
-    // Increase the contrast by lowering the base weight and increasing the max weight
-    // Base weight is 300 (was 400), max weight is 950 (was 900)
-    const letterWeight = Math.round(300 + waveIntensity * 650)
+    const letterWeight = Math.round(BASE_WEIGHT + waveIntensity * WEIGHT_RANGE)
     
     // Keep optical size constant during wave animation
     const letterOpticalSize = opticalSize
 
+    // Calculate color based on wave intensity
+    // Interpolate between base and highlight colors based on wave intensity
+    const r = Math.round(BASE_COLOR.r + (HIGHLIGHT_COLOR.r - BASE_COLOR.r) * waveIntensity)
+    const g = Math.round(BASE_COLOR.g + (HIGHLIGHT_COLOR.g - BASE_COLOR.g) * waveIntensity)
+    const b = Math.round(BASE_COLOR.b + (HIGHLIGHT_COLOR.b - BASE_COLOR.b) * waveIntensity)
+    
+    const color = `rgb(${r}, ${g}, ${b})`
+
     return {
       display: 'inline-block',
       fontVariationSettings: `"wght" ${letterWeight}, "opsz" ${letterOpticalSize}`,
+      color: color,
     }
   }
 
@@ -47,8 +68,7 @@ export default function VariableTypePlayground() {
       lastTime = currentTime
 
       // Move the wave position
-      // Adjust the speed by changing the multiplier (currently 0.2)
-      setWavePosition(prev => (prev + deltaTime * 0.2) % 1)
+      setWavePosition(prev => (prev + deltaTime * WAVE_SPEED) % 1)
       
       waveFrame = requestAnimationFrame(animate)
     }
@@ -66,9 +86,9 @@ export default function VariableTypePlayground() {
   const paddingLength = paddingChars.length
 
   return (
-    <div className="flex flex-col items-center justify-center p-[5vw] min-h-screen overflow-auto">
-        <h1 className="text-[10vw]/[12vw] mb-12">
-        {/* Start padding */}
+    <div className="flex flex-col items-center justify-center p-[5vw]">
+      <h1 className="text-[11vw]/[13vw]">
+        {/* Start padding - invisible characters for smooth transition */}
         <span className="sr-only">
           {paddingChars.split('').map((char, index) => (
             <span
@@ -100,7 +120,7 @@ export default function VariableTypePlayground() {
           </span>
         ))}
         
-        {/* End padding */}
+        {/* End padding - invisible characters for smooth transition */}
         <span className="sr-only">
           {paddingChars.split('').map((char, index) => {
             const absoluteIndex = paddingLength + visibleText.length + index

@@ -7,27 +7,29 @@ export default function PictureFrame({ children }: { children: React.ReactNode }
       <div className="
           h-full
           border-[2.5vw]
-          border-[#2d2d2d]
-          bg-gradient-to-br from-[#2193b0] via-[#6dd5ed] to-[#2193b0]
+          border-[#000032]
+          bg-gradient-to-br from-[#000032] via-[#0066cc] to-[#00c8ff]
           shadow-inner
         ">
         {/* Inner frame */}
         <div className="
             h-full
             border-[2.5vw]
-            border-white
-            bg-gradient-to-br from-[#ff00cc] via-[#4ecdc4] to-[#002aff]
+            border-[#d7f1f7]
+            bg-gradient-to-br from-[#000032] via-[#0066cc] to-[#00c8ff]
             p-[2.5vw]
             backdrop-blur-sm
           ">
           {/* Content area with glass effect */}
           <div className="
-              bg-white/90 
+              bg-[#d7f1f7]
               h-full 
               relative
               backdrop-blur-md
               shadow-inner
-              overflow-auto
+              flex
+              items-center
+              justify-center
             ">
             {children}
           </div>
